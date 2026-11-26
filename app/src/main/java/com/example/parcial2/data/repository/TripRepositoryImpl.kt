@@ -40,7 +40,7 @@ class TripRepositoryImpl(
         }
     }
 
-    override suspend fun getTripDetail(id: Int): Result<TripDetail> {
+    override suspend fun getTripDetail(id: String): Result<TripDetail> {
         return try {
             val dto = remoteDataSource.getTripDetail(id)
             Result.success(dto.toDomain())

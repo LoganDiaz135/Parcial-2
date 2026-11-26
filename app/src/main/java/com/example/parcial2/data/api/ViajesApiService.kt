@@ -22,13 +22,13 @@ interface ViajesApiService {
     suspend fun createTrip(@Body request: CreateTripRequestDto): Response<TripDto>
 
     @GET("api/trips/{id}")
-    suspend fun getTripDetail(@Path("id") id: Int): Response<TripDetailDto>
+    suspend fun getTripDetail(@Path("id") id: String): Response<TripDetailDto>
 
     @GET("api/categories")
     suspend fun getCategories(): Response<List<CategoryDto>>
 
     @GET("api/places")
-    suspend fun getPlaces(@Query("tripId") tripId: Int? = null): Response<List<PlaceDto>>
+    suspend fun getPlaces(@Query("tripId") tripId: String? = null): Response<List<PlaceDto>>
 
     @POST("api/places")
     suspend fun createPlace(@Body request: CreatePlaceRequestDto): Response<PlaceDto>

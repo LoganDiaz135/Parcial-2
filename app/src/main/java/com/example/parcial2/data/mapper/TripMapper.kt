@@ -19,7 +19,7 @@ fun CategoryDto.toDomain(): Category {
 
 fun TripDto.toDomain(): Trip {
     return Trip(
-        id = id ?: 0,
+        id = id.orEmpty(),
         name = name.orEmpty(),
         destination = destination.orEmpty(),
         startDate = startDate.orEmpty(),
@@ -29,8 +29,8 @@ fun TripDto.toDomain(): Trip {
 
 fun PlaceDto.toDomain(): Place {
     return Place(
-        id = id ?: 0,
-        tripId = tripId ?: 0,
+        id = id.orEmpty(),
+        tripId = tripId.orEmpty(),
         name = name.orEmpty(),
         description = description.orEmpty(),
         city = city.orEmpty(),
@@ -42,7 +42,7 @@ fun PlaceDto.toDomain(): Place {
 
 fun TripDetailDto.toDomain(): TripDetail {
     return TripDetail(
-        id = id ?: 0,
+        id = id.orEmpty(),
         name = name.orEmpty(),
         destination = destination.orEmpty(),
         startDate = startDate.orEmpty(),

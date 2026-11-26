@@ -29,7 +29,7 @@ class ViajesRemoteDataSource(
         }
     }
 
-    suspend fun getTripDetail(id: Int): TripDetailDto {
+    suspend fun getTripDetail(id: String): TripDetailDto {
         val response = apiService.getTripDetail(id)
         if (response.isSuccessful && response.body() != null) {
             return response.body()!!

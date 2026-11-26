@@ -11,7 +11,7 @@ class PlaceRepositoryImpl(
 ) : PlaceRepository {
 
     override suspend fun createPlace(
-        tripId: Int,
+        tripId: String,
         name: String,
         description: String,
         city: String,

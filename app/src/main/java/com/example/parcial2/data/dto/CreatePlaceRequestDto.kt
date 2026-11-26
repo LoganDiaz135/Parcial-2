@@ -1,7 +1,7 @@
 package com.example.parcial2.data.dto
 
 data class CreatePlaceRequestDto(
-    val tripId: Int,
+    val tripId: String,
     val name: String,
     val description: String,
     val city: String,

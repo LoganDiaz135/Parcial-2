@@ -1,8 +1,8 @@
 package com.example.parcial2.model
 
 data class Place(
-    val id: Int,
-    val tripId: Int,
+    val id: String,
+    val tripId: String,
     val name: String,
     val description: String,
     val city: String,

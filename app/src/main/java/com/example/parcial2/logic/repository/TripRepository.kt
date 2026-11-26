@@ -6,5 +6,5 @@ import com.example.parcial2.model.TripDetail
 interface TripRepository {
     suspend fun getTrips(): Result<List<Trip>>
     suspend fun createTrip(name: String, destination: String, startDate: String, endDate: String): Result<Trip>
-    suspend fun getTripDetail(id: Int): Result<TripDetail>
+    suspend fun getTripDetail(id: String): Result<TripDetail>
 }
