@@ -17,9 +17,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.parcial2.ui.PantallaDetalleViaje
+import com.example.parcial2.ui.PantallaFormularioLugar
 import com.example.parcial2.ui.PantallaFormularioViaje
 import com.example.parcial2.ui.PantallaInicioViajes
 import com.example.parcial2.ui.theme.Parcial2Theme
+import com.example.parcial2.viewmodel.PlaceViewModel
+import com.example.parcial2.viewmodel.TripDetailViewModel
 import com.example.parcial2.viewmodel.TripViewModel
 
 class MainActivity : ComponentActivity() {
@@ -36,13 +40,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppViajesContent(
-    viewModel: TripViewModel = viewModel(factory = TripViewModel.Factory())
+    tripViewModel: TripViewModel = viewModel(factory = TripViewModel.Factory()),
+    detailViewModel: TripDetailViewModel = viewModel(factory = TripDetailViewModel.Factory()),
+    placeViewModel: PlaceViewModel = viewModel(factory = PlaceViewModel.Factory())
 ) {
     val contexto = LocalContext.current
     var pantallaActual by remember { mutableStateOf("inicio") }
+    var tripIdSeleccionado by remember { mutableStateOf("") }
 
-    val uiState by viewModel.uiState.collectAsState()
-    val formState by viewModel.formState.collectAsState()
+    val uiState by tripViewModel.uiState.collectAsState()
+    val formState by tripViewModel.formState.collectAsState()
+    val detailUiState by detailViewModel.uiState.collectAsState()
+    val placeFormState by placeViewModel.formState.collectAsState()
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         when (pantallaActual) {
@@ -50,18 +59,16 @@ fun AppViajesContent(
                 PantallaInicioViajes(
                     uiState = uiState,
                     alCrearViaje = {
-                        viewModel.limpiarFormulario()
+                        tripViewModel.limpiarFormulario()
                         pantallaActual = "crear"
                     },
                     alSeleccionarViaje = { viaje ->
-                        Toast.makeText(
-                            contexto,
-                            "Viaje seleccionado: ${viaje.name} (${viaje.destination})",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        tripIdSeleccionado = viaje.id
+                        detailViewModel.cargarDetalle(viaje.id)
+                        pantallaActual = "detalle"
                     },
                     alReintentar = {
-                        viewModel.cargarViajes()
+                        tripViewModel.cargarViajes()
                     },
                     modifier = Modifier.padding(innerPadding)
                 )
@@ -74,18 +81,65 @@ fun AppViajesContent(
                     fechaInicio = formState.fechaInicio,
                     fechaFin = formState.fechaFin,
                     mensajeError = formState.mensajeError,
-                    alCambiarNombre = { viewModel.onNombreChange(it) },
-                    alCambiarDestino = { viewModel.onDestinoChange(it) },
-                    alCambiarFechaInicio = { viewModel.onFechaInicioChange(it) },
-                    alCambiarFechaFin = { viewModel.onFechaFinChange(it) },
+                    alCambiarNombre = { tripViewModel.onNombreChange(it) },
+                    alCambiarDestino = { tripViewModel.onDestinoChange(it) },
+                    alCambiarFechaInicio = { tripViewModel.onFechaInicioChange(it) },
+                    alCambiarFechaFin = { tripViewModel.onFechaFinChange(it) },
                     alGuardar = {
-                        viewModel.guardarViaje {
-                            Toast.makeText(contexto, "¡Viaje creado en la API exitosamente!", Toast.LENGTH_SHORT).show()
+                        tripViewModel.guardarViaje {
+                            Toast.makeText(contexto, "¡Viaje creado exitosamente!", Toast.LENGTH_SHORT).show()
                             pantallaActual = "inicio"
                         }
                     },
                     alVolver = {
                         pantallaActual = "inicio"
+                    }
+                )
+            }
+
+            "detalle" -> {
+                PantallaDetalleViaje(
+                    uiState = detailUiState,
+                    alVolver = {
+                        pantallaActual = "inicio"
+                    },
+                    alAgregarLugar = { tripId, startDate, endDate ->
+                        placeViewModel.inicializarFormulario(tripId, startDate, endDate)
+                        pantallaActual = "lugar"
+                    },
+                    alReintentar = {
+                        if (tripIdSeleccionado.isNotBlank()) {
+                            detailViewModel.cargarDetalle(tripIdSeleccionado)
+                        }
+                    }
+                )
+            }
+
+            "lugar" -> {
+                PantallaFormularioLugar(
+                    nombre = placeFormState.nombre,
+                    descripcion = placeFormState.descripcion,
+                    ciudad = placeFormState.ciudad,
+                    categoriaSeleccionadaId = placeFormState.categoriaSeleccionadaId,
+                    categorias = placeFormState.categorias,
+                    fechaTentativa = placeFormState.fechaTentativa,
+                    fechaInicioViaje = placeFormState.tripStartDate,
+                    fechaFinViaje = placeFormState.tripEndDate,
+                    mensajeError = placeFormState.mensajeError,
+                    alCambiarNombre = { placeViewModel.onNombreChange(it) },
+                    alCambiarDescripcion = { placeViewModel.onDescripcionChange(it) },
+                    alCambiarCiudad = { placeViewModel.onCiudadChange(it) },
+                    alCambiarCategoria = { placeViewModel.onCategoriaChange(it) },
+                    alCambiarFechaTentativa = { placeViewModel.onFechaTentativaChange(it) },
+                    alGuardar = {
+                        placeViewModel.guardarLugar {
+                            Toast.makeText(contexto, "¡Lugar registrado exitosamente!", Toast.LENGTH_SHORT).show()
+                            detailViewModel.cargarDetalle(placeFormState.tripId)
+                            pantallaActual = "detalle"
+                        }
+                    },
+                    alVolver = {
+                        pantallaActual = "detalle"
                     }
                 )
             }

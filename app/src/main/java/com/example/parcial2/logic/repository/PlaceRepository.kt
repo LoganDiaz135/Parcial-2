@@ -4,7 +4,7 @@ import com.example.parcial2.model.Place
 
 interface PlaceRepository {
     suspend fun createPlace(
-        tripId: Int,
+        tripId: String,
         name: String,
         description: String,
         city: String,
