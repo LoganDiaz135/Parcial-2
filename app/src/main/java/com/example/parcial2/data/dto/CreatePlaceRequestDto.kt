@@ -6,5 +6,6 @@ data class CreatePlaceRequestDto(
     val description: String,
     val city: String,
     val categoryId: Int,
-    val tentativeDate: String
+    val tentativeDate: String,
+    val amount: Double = 0.0
 )

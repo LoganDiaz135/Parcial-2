@@ -16,7 +16,8 @@ class CreatePlaceUseCase(
         categoryId: Int,
         tentativeDate: String,
         tripStartDate: String,
-        tripEndDate: String
+        tripEndDate: String,
+        amount: Double = 0.0
     ): Result<Place> {
         val validation = tripValidator.validatePlace(
             name = name,
@@ -25,7 +26,8 @@ class CreatePlaceUseCase(
             categoryId = categoryId,
             tentativeDate = tentativeDate,
             tripStartDate = tripStartDate,
-            tripEndDate = tripEndDate
+            tripEndDate = tripEndDate,
+            amount = amount
         )
         if (!validation.isValid) {
             return Result.failure(IllegalArgumentException(validation.errorMessage))
@@ -36,7 +38,8 @@ class CreatePlaceUseCase(
             description = description,
             city = city,
             categoryId = categoryId,
-            tentativeDate = tentativeDate
+            tentativeDate = tentativeDate,
+            amount = amount
         )
     }
 }

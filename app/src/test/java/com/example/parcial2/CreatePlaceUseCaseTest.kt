@@ -19,7 +19,8 @@ class CreatePlaceUseCaseTest {
             description: String,
             city: String,
             categoryId: Int,
-            tentativeDate: String
+            tentativeDate: String,
+            amount: Double
         ): Result<Place> {
             val nuevo = Place(
                 id = "101",
@@ -28,7 +29,8 @@ class CreatePlaceUseCaseTest {
                 description = description,
                 city = city,
                 categoryId = categoryId,
-                tentativeDate = tentativeDate
+                tentativeDate = tentativeDate,
+                amount = amount
             )
             lugaresCreados.add(nuevo)
             return Result.success(nuevo)
@@ -48,7 +50,8 @@ class CreatePlaceUseCaseTest {
             categoryId = 1,
             tentativeDate = "2026-06-15",
             tripStartDate = "2026-06-10",
-            tripEndDate = "2026-06-20"
+            tripEndDate = "2026-06-20",
+            amount = 25.0
         )
 
         assertTrue(result.isSuccess)
@@ -69,7 +72,8 @@ class CreatePlaceUseCaseTest {
             categoryId = 1,
             tentativeDate = "2026-07-01",
             tripStartDate = "2026-06-10",
-            tripEndDate = "2026-06-20"
+            tripEndDate = "2026-06-20",
+            amount = 25.0
         )
 
         assertTrue(result.isFailure)

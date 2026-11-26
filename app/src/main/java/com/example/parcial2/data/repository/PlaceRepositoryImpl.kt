@@ -16,7 +16,8 @@ class PlaceRepositoryImpl(
         description: String,
         city: String,
         categoryId: Int,
-        tentativeDate: String
+        tentativeDate: String,
+        amount: Double
     ): Result<Place> {
         return try {
             val request = CreatePlaceRequestDto(
@@ -25,7 +26,8 @@ class PlaceRepositoryImpl(
                 description = description,
                 city = city,
                 categoryId = categoryId,
-                tentativeDate = tentativeDate
+                tentativeDate = tentativeDate,
+                amount = amount
             )
             val dto = remoteDataSource.createPlace(request)
             Result.success(dto.toDomain())

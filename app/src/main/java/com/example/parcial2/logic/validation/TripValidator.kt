@@ -45,7 +45,8 @@ class TripValidator {
         categoryId: Int,
         tentativeDate: String,
         tripStartDate: String,
-        tripEndDate: String
+        tripEndDate: String,
+        amount: Double = 1.0
     ): ValidationResult {
         if (name.isBlank()) {
             return ValidationResult(false, "El nombre del lugar es obligatorio.")
@@ -62,6 +63,9 @@ class TripValidator {
         if (tentativeDate.isBlank()) {
             return ValidationResult(false, "La fecha tentativa de visita es obligatoria.")
         }
+        if (amount <= 0.0) {
+            return ValidationResult(false, "El valor del gasto debe ser mayor a cero.")
+        }
 
         val visitDate = parseDate(tentativeDate)
             ?: return ValidationResult(false, "La fecha tentativa no es válida (usar AAAA-MM-DD).")
@@ -77,6 +81,26 @@ class TripValidator {
 
         return ValidationResult(true)
     }
+
+    fun validateExpense(
+        name: String,
+        description: String,
+        city: String,
+        categoryId: Int,
+        expenseDate: String,
+        tripStartDate: String,
+        tripEndDate: String,
+        amount: Double = 1.0
+    ): ValidationResult = validatePlace(
+        name = name,
+        description = description,
+        city = city,
+        categoryId = categoryId,
+        tentativeDate = expenseDate,
+        tripStartDate = tripStartDate,
+        tripEndDate = tripEndDate,
+        amount = amount
+    )
 
     private fun parseDate(dateStr: String): Date? {
         return try {

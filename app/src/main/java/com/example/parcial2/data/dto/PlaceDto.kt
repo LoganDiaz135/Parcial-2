@@ -8,5 +8,6 @@ data class PlaceDto(
     val city: String?,
     val categoryId: Int?,
     val tentativeDate: String?,
-    val category: CategoryDto?
+    val category: CategoryDto?,
+    val amount: Double? = 0.0
 )

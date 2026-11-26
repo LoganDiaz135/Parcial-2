@@ -9,6 +9,9 @@ interface PlaceRepository {
         description: String,
         city: String,
         categoryId: Int,
-        tentativeDate: String
+        tentativeDate: String,
+        amount: Double = 0.0
     ): Result<Place>
 }
+
+typealias ExpenseRepository = PlaceRepository

@@ -8,5 +8,11 @@ data class Place(
     val city: String,
     val categoryId: Int,
     val tentativeDate: String,
-    val category: Category? = null
-)
+    val category: Category? = null,
+    val amount: Double = 0.0
+) {
+    val value: Double get() = amount
+    val expenseDate: String get() = tentativeDate
+}
+
+typealias Expense = Place

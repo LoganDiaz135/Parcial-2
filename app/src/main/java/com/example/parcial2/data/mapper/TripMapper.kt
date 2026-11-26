@@ -36,7 +36,8 @@ fun PlaceDto.toDomain(): Place {
         city = city.orEmpty(),
         categoryId = categoryId ?: 0,
         tentativeDate = tentativeDate.orEmpty(),
-        category = category?.toDomain()
+        category = category?.toDomain(),
+        amount = amount ?: 0.0
     )
 }
 

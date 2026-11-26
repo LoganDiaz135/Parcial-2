@@ -72,9 +72,39 @@ class TripValidatorTest {
             categoryId = 1,
             tentativeDate = "2026-06-15",
             tripStartDate = "2026-06-10",
-            tripEndDate = "2026-06-20"
+            tripEndDate = "2026-06-20",
+            amount = 50.0
         )
         assertTrue(result.isValid)
+    }
+
+    @Test
+    fun validatePlace_conMontoCeroONegativo_retornaInvalido() {
+        val resultCero = validator.validatePlace(
+            name = "Coliseo Romano",
+            description = "Entrada",
+            city = "Roma",
+            categoryId = 1,
+            tentativeDate = "2026-06-15",
+            tripStartDate = "2026-06-10",
+            tripEndDate = "2026-06-20",
+            amount = 0.0
+        )
+        assertFalse(resultCero.isValid)
+        assertEquals("El valor del gasto debe ser mayor a cero.", resultCero.errorMessage)
+
+        val resultNegativo = validator.validatePlace(
+            name = "Coliseo Romano",
+            description = "Entrada",
+            city = "Roma",
+            categoryId = 1,
+            tentativeDate = "2026-06-15",
+            tripStartDate = "2026-06-10",
+            tripEndDate = "2026-06-20",
+            amount = -15.0
+        )
+        assertFalse(resultNegativo.isValid)
+        assertEquals("El valor del gasto debe ser mayor a cero.", resultNegativo.errorMessage)
     }
 
     @Test
